@@ -40,9 +40,20 @@ router.post('/api/:id', function (req, res) {
 	var reviewid = req.params.id;
   res.send(req.body);
 });
+router.put('/api/:id', function (req, res) {
+	var newReview = {
+		name: req.body.name,
+		placeType: req.body.placeType,
+		stars: req.body.stars
+	}
+	var reviewid = req.params.id;
+	reviews[reviewid]= newReview;
+  res.send(reviews);
+});
 router.delete('/api/:id', function (req, res) {
 	var reviewid = req.params.id;
-  res.send(req.body);
+	reviews.splice(reviewid,1)
+  res.send(reviews);
 });
 
 module.exports = router;
