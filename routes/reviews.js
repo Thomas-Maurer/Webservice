@@ -12,8 +12,13 @@ router.route('/api/')
 		if (err) {
 			res.status(500).send({'error': err});
 			} else {
+				var accept = req.get('Accept');
+				if (!accept.indexOf("html")){
 					res.send(reviews);
+				}else{
+					res.render('fullReviews', {title: 'List Reviews', reviews: reviews});
 				   }
+				}
 		});
 	});
 router.route('/api/')
@@ -26,12 +31,19 @@ router.route('/api/')
 			placeType: req.body.placeType,
 			stars: req.body.stars
 		};
+		var accept = req.get('Accept');
 		Review.create(newReview, function (err, reviews) {
 		if (err) {
 			res.status(500).send({'error': err});
 			} else {
+				res.status(201);
+				if(accept.indexOf("html")){
+						res.redirect('/reviews/api/');
+					}
+				else{
 					res.send(reviews);
-				   }
+				}
+			}
 		});
 	}
 	});
@@ -47,7 +59,6 @@ router.route('/api/:id')
 				placeType: req.body.placeType,
 				stars: req.body.stars
 			}
-			console.log(newReview);
 	  		Review.findOneAndUpdate(reviewid, newReview, function (err, reviews) {
 	  		if (err) {
 				res.status(500).send({'error': err});
@@ -65,7 +76,13 @@ router.route('/api/:id')
 	  		if (err) {
 				res.status(500).send({'error': err});
 			} else {
-					res.send(reviews);
+				var accept = req.get('Accept');
+				if(accept.indexOf("html")){
+					res.render('updateReview', {review: reviews});
+				}
+				else{
+						res.send(reviews);
+					}
 				   }
 	  		 });
 	});
@@ -87,6 +104,7 @@ router.get('/', function(req, res, next) {
   res.render('reviews', { title: 'Reviews',reviews: reviews });
 });
 
+
 router.post('/api/', function (req, res) {
 	if (req.body.name === undefined || req.body.placeType === undefined || req.body.stars === undefined){
 		res.status(400).json({error: 'Erreur niveau des paramètres'});
@@ -96,8 +114,6 @@ router.post('/api/', function (req, res) {
 		placeType: req.body.placeType,
 		stars: req.body.stars
 	}
-	reviews.push(newReview);
-	res.send('Ajout réussi', reviews);
   }
 });
 router.delete('/api/', function (req, res) {
@@ -107,9 +123,15 @@ router.delete('/api/', function (req, res) {
 router.get('/api/:id', function (req, res) {
 	var reviewid = req.params.id;
 	if (reviewid > 0 && reviewid<= reviews.length){
- 		 res.send(reviews[reviewid]);
+	 	var accept = req.get('Accept');
+		if(!accept.indexOf("html")){
+			res.render('updateReview', {review: reviews[reviewid]});
+		}
+		else{
+				res.send(reviews[reviewid]);
+			}
 	}else{
-		res.status(404).json({error: 'Erreur cet id ne peut être supprimé hors du tableau'});
+		res.status(404).json({error: 'Erreur cet id ne peut être affichée'});
 	}
 });
 
