@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose');
 
-var mongolabStringConnexion = 'mongodb://localhost:27017/ws-restapi';
+var mongolabStringConnexion = 'mongodb://webservice:webservice@ds037571.mongolab.com:37571/webservices';
 
 mongoose.connect(mongolabStringConnexion);
 
