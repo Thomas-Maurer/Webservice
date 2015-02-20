@@ -48,6 +48,26 @@ router.route('/api/')
 	}
 	});
 
+
+//GET TOP REVIEWS
+router.route('/api/top')
+.get(function (req, res) {
+	  		Review.find({}, null , { sort: '-stars', limit: 3 },function (err, reviews) {
+			if (err) {
+				res.status(500).send({'error': err});
+			} else {
+				res.status(200);
+				var accept =req.get('Accept');
+				if(accept.indexOf("html")){
+					res.render('topReviews', { title: 'Top Reviews', reviews: reviews });
+				}
+				else{
+					res.send(reviews);
+				}
+			}
+		});
+	});
+
 router.route('/api/:id')
 .put(function (req, res) {
 	if (req.body.name === undefined || req.body.placeType === undefined || req.body.stars === undefined){
