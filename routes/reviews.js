@@ -47,6 +47,47 @@ router.route('/api/')
 		});
 	}
 	});
+//SEARCH FCT GET
+
+router.route('/api/search')
+.get(function (req, res) {
+		if(req.query.name || req.query.placeType || req.query.stars){
+			if(req.query.stars == ''){
+				req.query.stars = {$gt: '0'};
+			}
+			Review.find({'name' : {$regex: req.query.name, $options: 'i'}, 'placeType' : {$regex: req.query.placeType, $options: 'i'}, 'stars' : req.query.stars}, function (err, reviews) {
+				if (err) {
+					res.status(500).send({'error': err});
+				} else {
+					res.status(200);
+					var accept =req.get('Accept');
+					if(accept.indexOf("html")){
+						console.log(reviews);
+						res.render('searchResult', { title: 'Result of your search', reviews: reviews });
+					}
+					else{
+						res.send(reviews);
+					}
+				}
+			});
+		}
+		else{
+			res.status(200);
+			var accept =req.get('Accept');
+			if(accept.indexOf("html")){
+				res.render('searchResult', { title: 'Result of your search'});
+			}
+			else{
+				res.send('You must enter some parameters to search something');
+			}
+		}
+	})
+
+	;
+
+
+
+
 
 
 //GET TOP REVIEWS

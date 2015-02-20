@@ -3,6 +3,16 @@ block content
 	h1= title
 	p Welcome to #{title}
 
+	h1 Search
+	form(method='GET' action='search')
+		legend Name
+		input(id='name', type='text', name="name")
+		legend Type
+		input(id='placeType', type='text', name="placeType")
+		legend Rate
+		input(id='stars', type='text', name="stars")
+		input(type='submit', value='Search')
+
 	div
 		a(href="/reviews/api/top") Get top restaurant
 	ul
