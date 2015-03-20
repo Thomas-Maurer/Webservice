@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  div(id='review')
+    img(src="http://icons.iconarchive.com/icons/designcontest/outline/16/Pen-2-icon.png", onClick='showUpdateForm(true)')
+    h1= review.name
+    h2= review.placeType
+    - for (var i = 0; i <  review.stars; i++)
+      img(src="http://icons.iconarchive.com/icons/lovuhemant/merry-christmas/24/Star-empty-icon.png", alt="famous")
+
+  div(id='editForm' style='display:none')
+    input(id='name', type='text', value='#{review.name}')
+    input(id='placeType', type='text', value='#{review.placeType}')
+    input(id='stars', type='text', value='#{review.stars}')
+    input(type='button', onclick='updateThisReview("#{review._id}")' value='Update')
+
+  div
+    a(href="/reviews/api/") Get back to all reviews

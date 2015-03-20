@@ -1,0 +1,34 @@
+extends layout
+block content
+	h1= title
+	p Welcome to #{title}
+
+	h1 Search
+	form(method='GET' action='search')
+		legend Name
+		input(id='name', type='text', name="name")
+		legend Type
+		input(id='placeType', type='text', name="placeType")
+		legend Rate
+		input(id='stars', type='text', name="stars")
+		input(type='submit', value='Search')
+
+	div
+		a(href="/reviews/api/top") Get top restaurant
+	ul
+		each review, i in reviews
+			li= i + ':' + review.name + ' ' + review.placeType + ' '
+				- for (var x = 0; x < review.stars; x++)
+					img(src="http://icons.iconarchive.com/icons/lovuhemant/merry-christmas/24/Star-empty-icon.png")
+				button(type='submit' onclick="deleteReview('#{review.id}')") Delete
+				img(src="http://icons.iconarchive.com/icons/designcontest/outline/16/Pen-2-icon.png", onclick="updateReview('#{review.id}')")
+
+	h2 Add your Restaurant
+	form(method='POST' action='')
+		legend Name
+		input(id='name', type='text', name="name")
+		legend Type
+		input(id='placeType', type='text', name="placeType")
+		legend Rate
+		input(id='stars', type='text', name="stars")
+		input(type='submit', value='Add')
